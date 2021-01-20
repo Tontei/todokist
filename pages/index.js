@@ -91,6 +91,7 @@ export function getStaticProps() {
   const res = fetch(
     process.env.URL
   ).then((response) => response.json());
+  console.log(res);
   return {
     props: {
       res,

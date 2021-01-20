@@ -22,7 +22,7 @@ export default function Home(props) {
       return [...prevValue, item];
     });
 
-    fetch("http://todokist.vercel.app/api/list", {
+    fetch(process.env.URL, {
       method: "POST",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -47,7 +47,7 @@ export default function Home(props) {
       content: detail,
     };
 
-    fetch("https://todokist.vercel.app/api/list", {
+    fetch(process.env.URL, {
       method: "DELETE",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -89,7 +89,7 @@ export default function Home(props) {
 
 export async function getStaticProps() {
   const res = await fetch(
-    "http://todokist.vercel.app/api/list"
+    process.env.URL
   ).then((response) => response.json());
   return {
     props: {

@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Item from "../components/Item";
 import Add from "../components/Add";
 import Modal from "../components/Modal";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home(props) {
   const [addItem, setAddItem] = useState(false);
@@ -69,7 +69,7 @@ export default function Home(props) {
           </div>
 
           <div className="flex flex-col pt-5">
-            {listArray.map((element, index) => {
+            {listArray && listArray.map((element, index) => {
               return <Item key={index} text={element} remove={removeItem} />;
             })}
             {addItem && (

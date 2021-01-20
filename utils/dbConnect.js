@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 async function dbConnect() {
 
-  await mongoose.connect("mongodb://localhost:27017/todolist", {
+  await mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

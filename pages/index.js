@@ -22,7 +22,7 @@ export default function Home(props) {
       return [...prevValue, item];
     });
 
-    fetch("http://192.168.43.228:3000/api/list", {
+    fetch("http://todokist.vercel.app/api/list", {
       method: "POST",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -47,7 +47,7 @@ export default function Home(props) {
       content: detail,
     };
 
-    fetch("http://192.168.43.228:3000/api/list", {
+    fetch("https://todokist.vercel.app/api/list", {
       method: "DELETE",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -89,7 +89,7 @@ export default function Home(props) {
 
 export async function getStaticProps() {
   const res = await fetch(
-    "http://192.168.43.228:3000/api/list"
+    "http://todokist.vercel.app/api/list"
   ).then((response) => response.json());
   return {
     props: {

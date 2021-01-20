@@ -87,8 +87,8 @@ export default function Home(props) {
   );
 }
 
-export async function getStaticProps() {
-  const res = await fetch(
+export function getStaticProps() {
+  const res = fetch(
     process.env.URL
   ).then((response) => response.json());
   return {

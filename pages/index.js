@@ -69,9 +69,10 @@ export default function Home(props) {
           </div>
 
           <div className="flex flex-col pt-5">
-            {listArray && listArray.map((element, index) => {
-              return <Item key={index} text={element} remove={removeItem} />;
-            })}
+            {listArray &&
+              listArray.map((element, index) => {
+                return <Item key={index} text={element} remove={removeItem} />;
+              })}
             {addItem && (
               <Modal
                 onClick={modalAddButtonClicked}
@@ -87,11 +88,11 @@ export default function Home(props) {
   );
 }
 
-export function getStaticProps() {
-  const res = fetch(
-    process.env.URL
-  ).then((response) => response.json());
-  console.log(res);
+export async function getStaticProps() {
+  const res = await fetch(process.env.URL)
+    .then((response) => response.json())
+    .then((data) => data);
+    
   return {
     props: {
       res,

@@ -69,7 +69,6 @@ export default (req, res) => {
       }
     });
   } else {
-    res.status(400)
-    res.json({ Error: "bad request" });
+    res.status(400).json({ Error: "bad request" });
   }
 };

@@ -1,65 +1,99 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Header from "../components/Header";
+import Item from "../components/Item";
+import Add from "../components/Add";
+import Modal from "../components/Modal";
+import { useState, useEffect } from "react";
 
-export default function Home() {
+export default function Home(props) {
+  const [addItem, setAddItem] = useState(false);
+  const [listArray, setListArray] = useState([...props.res.items]);
+
+  function addButtonClicked() {
+    setAddItem(true);
+  }
+
+  function modalAddButtonClicked(item) {
+    const objectToBeSent = {
+      newItem: item,
+    };
+
+    setListArray((prevValue) => {
+      return [...prevValue, item];
+    });
+
+    fetch("http://192.168.43.228:3000/api/list", {
+      method: "POST",
+      contentType: "application/json",
+      body: JSON.stringify(objectToBeSent),
+    }).catch((err) => console.log(err));
+
+    setAddItem(false);
+  }
+
+  function cancelButtonClicked() {
+    setAddItem(false);
+  }
+
+  function removeItem(detail) {
+    setListArray((prevValue) => {
+      let newOne = prevValue.filter((element) => {
+        return element != detail;
+      });
+      return newOne;
+    });
+
+    let objectToBeSent = {
+      content: detail,
+    };
+
+    fetch("http://192.168.43.228:3000/api/list", {
+      method: "DELETE",
+      contentType: "application/json",
+      body: JSON.stringify(objectToBeSent),
+    }).catch((err) => console.log(err));
+  }
+
   return (
-    <div className={styles.container}>
+    <div className="w-full min-h-screen bg-gradient-to-b from-first to-second">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <main className="h-full w-full grid grid-cols-1 md:grid-cols-3  pt-6">
+        <div className="md:col-start-2 md:col-end-3 px-2">
+          <Header text="Todo-list" />
+          <div className="flex justify-end">
+            <Add text="+" onClick={addButtonClicked} />
+          </div>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          <div className="flex flex-col pt-5">
+            {listArray.map((element, index) => {
+              return <Item key={index} text={element} remove={removeItem} />;
+            })}
+            {addItem && (
+              <Modal
+                onClick={modalAddButtonClicked}
+                cancelClick={cancelButtonClicked}
+              />
+            )}
+          </div>
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+      <footer className=""></footer>
     </div>
-  )
+  );
+}
+
+export async function getStaticProps() {
+  const res = await fetch(
+    "http://192.168.43.228:3000/api/list"
+  ).then((response) => response.json());
+  return {
+    props: {
+      res,
+    },
+  };
 }

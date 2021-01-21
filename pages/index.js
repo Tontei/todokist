@@ -22,7 +22,7 @@ export default function Home(props) {
       return [...prevValue, item];
     });
 
-    fetch(process.env.URL, {
+    fetch("/api/list", {
       method: "POST",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -47,7 +47,7 @@ export default function Home(props) {
       content: detail,
     };
 
-    fetch(process.env.URL, {
+    fetch("/api/list", {
       method: "DELETE",
       contentType: "application/json",
       body: JSON.stringify(objectToBeSent),
@@ -89,7 +89,7 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(process.env.URL)
+  const res = await fetch("/api/list")
     .then((response) => response.json())
     .then((data) => data);
     
